@@ -36,9 +36,16 @@ $db->exec('CREATE TABLE IF NOT EXISTS shop_items (
     icon TEXT DEFAULT ""
 )');
 
-// Ensure trail and selected_character columns exist
-$db->exec('ALTER TABLE users ADD COLUMN trail TEXT DEFAULT \'\'');
-$db->exec('ALTER TABLE users ADD COLUMN selected_character TEXT DEFAULT \'potato_default\'');
+// SQLite: ADD COLUMN fails if column already exists. Check first.
+function columnExists($db, $table, $col) {
+    $res = $db->query("PRAGMA table_info($table)");
+    while ($row = $res->fetchArray(SQLITE3_ASSOC)) {
+        if ($row['name'] === $col) return true;
+    }
+    return false;
+}
+if (!columnExists($db, 'users', 'trail')) $db->exec('ALTER TABLE users ADD COLUMN trail TEXT DEFAULT \'\'');
+if (!columnExists($db, 'users', 'selected_character')) $db->exec('ALTER TABLE users ADD COLUMN selected_character TEXT DEFAULT \'potato_default\'');
 
 // Seed shop items if empty
 $count = $db->querySingle('SELECT COUNT(*) FROM shop_items');
