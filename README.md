@@ -1,8 +1,17 @@
-# 🥔 Potato Dungeons Fork
+# 🥔 Potato Dungeon fork minimax
 
 Enhanced fork of Potato Dungeons — a roguelike dungeon crawler built with vanilla JS & HTML5 Canvas.
 
 ## Features (v0.9)
+
+## Minimax Edition
+
+- 🤖 Minimax-KI: Gegner berechnen Züge, um den Spieler optimal zu jagen
+- ⚖️ Balance-Pass: Waffen, Relikte und Gegner für faire Herausforderung abgestimmt
+- 🎯 Strategische Tiefe: Mehr Planung, weniger Zufall bei Belohnungen
+- 📊 Meta-Analyse: Bessere Sichtbarkeit von Build-Synergien und Run-Statistiken
+- 🔧 Solides Fundament: Branding, CSS-Variablen und Versionierung für zukünftige Iterationen
+
 
 - ✅ Bug-Fix: rewards.js Template-Literal
 - ✅ Dash ability (Space / Double-Tap)
@@ -46,7 +55,7 @@ Enhanced fork of Potato Dungeons — a roguelike dungeon crawler built with vani
 
 ## Live Demo
 
-[https://ml-bets.com/potato-dungeons-fork/](https://ml-bets.com/potato-dungeons-fork/)
+[https://ml-bets.com/potato-dungeons-minimax/](https://ml-bets.com/potato-dungeons-minimax/)
 
 ## Original
 

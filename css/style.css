@@ -4,11 +4,20 @@
 :root {
   --bg-dark: #0f0e17;
   --bg-glass: rgba(30, 28, 50, 0.85);
+  --bg-overlay: rgba(10, 9, 20, 0.85);
   --border-glass: rgba(255, 255, 255, 0.08);
   --text: #e8e6f0;
   --text-dim: #8a88a0;
   --accent-bright: #a78bfa;
+  --accent-glass: rgba(167, 139, 250, 0.4);
+  --accent-red: #ff4466;
+  --accent-orange: #ff8800;
+  --accent-purple: #bb55ee;
   --gold: #ffd700;
+  --white-pure: #fff;
+  --white-soft: rgba(255, 255, 255, 0.03);
+  --white-medium: rgba(255, 255, 255, 0.15);
+  --overlay-dark: rgba(15, 14, 23, 0.75);
   --font: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
   --radius: 14px;
   --shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
@@ -43,32 +52,32 @@ html, body {
   transition: transform 0.15s ease;
 }
 .btn:active { transform: scale(0.94); }
-.btn-primary { background: linear-gradient(135deg, #7b5ea7, #a78bfa); color: #fff; box-shadow: 0 4px 20px rgba(123, 94, 167, 0.4); }
+.btn-primary { background: linear-gradient(135deg, #7b5ea7, var(--accent-bright)); color: var(--white-pure); box-shadow: 0 4px 20px rgba(123, 94, 167, 0.4); }
 .btn-secondary { background: var(--bg-glass); color: var(--text); border: 1px solid var(--border-glass); backdrop-filter: blur(10px); }
 
 .pause-btn {
   position: fixed; top: max(70px, env(safe-area-inset-top) + 64px); left: max(10px, env(safe-area-inset-left) + 4px); z-index: 100;
   width: 56px; height: 56px; border-radius: 16px;
-  border: 2px solid rgba(255,255,255,0.15);
-  background: rgba(15, 14, 23, 0.75); backdrop-filter: blur(12px);
-  color: #fff; font-size: 24px; cursor: pointer;
+  border: 2px solid var(--white-medium);
+  background: var(--overlay-dark); backdrop-filter: blur(12px);
+  color: var(--white-pure); font-size: 24px; cursor: pointer;
   display: none; align-items: center; justify-content: center; padding: 0; line-height: 1;
   box-shadow: 0 4px 16px rgba(0,0,0,0.4);
 }
-.pause-btn:active { transform: scale(0.88); background: rgba(167,139,250,0.4); }
+.pause-btn:active { transform: scale(0.88); background: var(--accent-glass); }
 .pause-btn.visible { display: inline-flex; }
 
 /* Menu */
 .menu-container { text-align: center; animation: fadeInUp 0.6s ease; padding: max(20px, env(safe-area-inset-top) + 8px) 20px 20px; position: relative; }
-.menu-canvas { width: 220px; height: 140px; margin: 0 auto 6px; display: block; border-radius: 16px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); cursor: pointer; touch-action: none; }
-.menu-title { font-size: 48px; font-weight: 900; line-height: 1; margin: 10px 0; color: #fff; text-shadow: 0 0 40px rgba(167,139,250,0.5); }
-.menu-title-accent { background: linear-gradient(135deg, #ff8800, #ff4466, #bb55ee); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.menu-canvas { width: 220px; height: 140px; margin: 0 auto 6px; display: block; border-radius: 16px; background: var(--white-soft); border: 1px solid rgba(255,255,255,0.06); cursor: pointer; touch-action: none; }
+.menu-title { font-size: 48px; font-weight: 900; line-height: 1; margin: 10px 0; color: var(--white-pure); text-shadow: 0 0 40px rgba(167,139,250,0.5); }
+.menu-title-accent { background: linear-gradient(135deg, var(--accent-orange), var(--accent-red), var(--accent-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 .menu-subtitle { font-size: 12px; color: var(--text-dim); margin-bottom: 20px; letter-spacing: 3px; text-transform: uppercase; }
 .menu-main-buttons { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; max-width: 280px; margin-left: auto; margin-right: auto; }
 .btn-large { font-size: 18px !important; padding: 16px 36px !important; }
 .menu-secondary-buttons { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
 .menu-secondary-buttons .btn { font-size: 12px; padding: 8px 14px; }
-.menu-controls { margin-top: 16px; font-size: 12px; color: rgba(255,255,255,0.25); padding: 10px 16px; background: rgba(255,255,255,0.03); border-radius: 8px; max-width: 340px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+.menu-controls { margin-top: 16px; font-size: 12px; color: rgba(255,255,255,0.25); padding: 10px 16px; background: var(--white-soft); border-radius: 8px; max-width: 340px; margin-left: auto; margin-right: auto; line-height: 1.6; }
 .menu-controls .key { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 4px; padding: 1px 6px; font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.5); }
 .key { display: inline-block; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; padding: 3px 8px; font-weight: 700; font-size: 11px; color: var(--text); margin-right: 4px; }
 .touch-hint { display: block; color: var(--accent-bright); font-size: 12px; margin-top: 10px; padding: 8px; background: rgba(167,139,250,0.1); border-radius: 8px; }
@@ -86,9 +95,9 @@ html, body {
 .endscreen-detail span { color: var(--text); font-weight: 600; }
 
 /* Pause */
-.pause-overlay { background: rgba(10,9,20,0.85); backdrop-filter: blur(12px); z-index: 60 !important; }
+.pause-overlay { background: var(--bg-overlay); backdrop-filter: blur(12px); z-index: 60 !important; }
 .pause-container { text-align: center; animation: fadeInUp 0.2s ease; display: flex; flex-direction: column; gap: 14px; align-items: center; }
-.pause-title { font-size: 48px; font-weight: 900; color: #fff; text-shadow: 0 0 35px rgba(167,139,250,0.5); margin-bottom: 6px; }
+.pause-title { font-size: 48px; font-weight: 900; color: var(--white-pure); text-shadow: 0 0 35px rgba(167,139,250,0.5); margin-bottom: 6px; }
 
 @keyframes bossShake { 0%, 100% { transform: translate(0, 0); } 10% { transform: translate(-4px, 2px); } 20% { transform: translate(4px, -2px); } 30% { transform: translate(-3px, -3px); } 40% { transform: translate(3px, 3px); } 50% { transform: translate(-2px, 1px); } 60% { transform: translate(2px, -1px); } 70% { transform: translate(-1px, -2px); } 80% { transform: translate(1px, 2px); } }
 body.boss-announce { animation: bossShake 0.6s ease; }
