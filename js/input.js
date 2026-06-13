@@ -23,6 +23,30 @@ const Input = {
     return false;
   },
 
+  _checkAttackButtonClick(screenX, screenY) {
+    if (!Game.player || !this.isMobile()) return false;
+    const rect = this._canvas.getBoundingClientRect();
+    const pad = 15, size = 56;
+    const attackX = rect.width - pad - size;
+    const attackY = rect.height - pad - size;
+    if (screenX >= attackX && screenX <= attackX + size && screenY >= attackY && screenY <= attackY + size) {
+      // Trigger a melee swing / manual attack pulse
+      if (Game.player.weapons) {
+        for (const w of Game.player.weapons) {
+          if (w.def.type === 'melee' && w.canAttack !== false) {
+            const elapsed = w.attackTimer || 0;
+            const interval = 1 / (w.def.attackSpeed || 1);
+            if (elapsed >= interval * 0.5) {
+              w.attackTimer = interval;
+            }
+          }
+        }
+      }
+      return true;
+    }
+    return false;
+  },
+
   _checkWeaponSlotClick(screenX, screenY) {
     if (!Game.player || !Game.player.weapons || Game.player.weapons.length === 0) return false;
     const isMobile = this.isMobile();
@@ -113,6 +137,23 @@ const Input = {
         }
       });
     }
+
+    // Mobile attack button handler (DOM element)
+    const attackBtn = document.getElementById('mobile-attack-btn');
+    if (attackBtn) {
+      attackBtn.addEventListener('touchstart', e => {
+        e.preventDefault();
+        if (Game.state === 'PLAYING' && Game.player) {
+          this._triggerManualAttack();
+        }
+      }, { passive: false });
+      attackBtn.addEventListener('mousedown', e => {
+        e.preventDefault();
+        if (Game.state === 'PLAYING' && Game.player) {
+          this._triggerManualAttack();
+        }
+      });
+    }
     window.addEventListener('keydown', e => {
       this.keys[e.code] = true;
       if (['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Escape'].includes(e.code)) e.preventDefault();
@@ -182,11 +223,12 @@ const Input = {
       const tx = t.clientX - rect.left;
       const ty = t.clientY - rect.top;
 
-      // Check if touch hits a weapon slot or dash button — if so, DON'T register as joystick/aim
+      // Check if touch hits a weapon slot, dash button or attack button — if so, DON'T register as joystick/aim
       const hitSlot = this._checkWeaponSlotClick(tx * (canvas.width / rect.width), ty * (canvas.height / rect.height));
       const hitDash = this._checkDashButtonClick(tx, ty);
+      const hitAttack = this._checkAttackButtonClick(tx, ty);
 
-      if (hitSlot || hitDash) {
+      if (hitSlot || hitDash || hitAttack) {
         // Touch hit a UI element — skip joystick/aim registration
         continue;
       }
@@ -356,6 +398,25 @@ const Input = {
     const sy = this.mouse.y - this._canvas.height / 2;
     this.mouse.worldX = camera.x + sx / zoom;
     this.mouse.worldY = camera.y + sy / zoom;
+  },
+
+  _triggerManualAttack() {
+    if (!Game.player || !Game.player.weapons) return;
+    for (const w of Game.player.weapons) {
+      if (w.def.type === 'melee' && w.canAttack !== false) {
+        const interval = 1 / (w.def.attackSpeed || 1);
+        if ((w.attackTimer || 0) >= interval * 0.5) {
+          w.attackTimer = interval;
+        }
+      }
+    }
+    // Auto-fire flag for ranged weapons during button hold
+    this._manualAttackPulse = true;
+    setTimeout(() => { this._manualAttackPulse = false; }, 80);
+  },
+
+  isManualAttackActive() {
+    return !!this._manualAttackPulse;
   },
 
   isPressed(code) { return !!this.keys[code]; },

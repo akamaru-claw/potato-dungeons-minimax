@@ -11,6 +11,11 @@ const Game = {
   _mpSyncTimer: 0,
   _lastEnemyCount: -1,
   _magnetUnlimited: false,
+  debugFps: false,
+  _fps: 0,
+  _fpsAccumulator: 0,
+  _fpsTimer: 0,
+  _fpsFrames: 0,
 
   async init() {
     const canvas = document.getElementById('game-canvas');
@@ -304,8 +309,20 @@ const Game = {
 
   loop(timestamp) {
     requestAnimationFrame(t => this.loop(t));
-    const dt = Math.min((timestamp - this.lastTime) / 1000, 0.05);
+    const rawDt = (timestamp - this.lastTime) / 1000;
+    const dt = Math.min(rawDt, 0.1);
     this.lastTime = timestamp;
+
+    if (this.debugFps) {
+      this._fpsAccumulator += dt;
+      this._fpsFrames++;
+      if (this._fpsAccumulator >= 0.5) {
+        this._fps = Math.round(this._fpsFrames / this._fpsAccumulator);
+        this._fpsAccumulator = 0;
+        this._fpsFrames = 0;
+      }
+    }
+
     if (this.state === 'PLAYING') this.update(dt);
     else if (this.state === 'REWARD') this.updateReward(dt);
     this.render();
@@ -679,6 +696,15 @@ const Game = {
       // Always-on co-op state debug moved to _updateMpDebug()
 
       if (Input.isMobile() || Input.touch.active) Input.renderJoystick(ctx);
+
+      if (this.debugFps && this._fps > 0) {
+        ctx.fillStyle = 'rgba(0,0,0,0.5)';
+        ctx.fillRect(8, 8, 70, 20);
+        ctx.fillStyle = '#44ff88';
+        ctx.font = "bold 12px 'Outfit', monospace";
+        ctx.textAlign = 'left';
+        ctx.fillText(this._fps + ' FPS', 12, 22);
+      }
     }
   },
 

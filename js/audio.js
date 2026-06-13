@@ -7,20 +7,29 @@ const SFX = {
   enabled: true,
 
   init() {
-    try {
-      this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-    } catch (e) {
-      this.enabled = false;
+    // Lazy: AudioContext erst bei erster User-Interaktion
+  },
+
+  ensureContext() {
+    if (!this.enabled) return false;
+    if (!this.ctx) {
+      try {
+        this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+      } catch (e) {
+        this.enabled = false;
+        return false;
+      }
     }
+    if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+    return !!this.ctx;
   },
 
   resume() {
-    if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+    this.ensureContext();
   },
 
   _play(fn) {
-    if (!this.enabled || !this.ctx) return;
-    this.resume();
+    if (!this.enabled || !this.ensureContext()) return;
     try { fn(this.ctx); } catch(e) {}
   },
 

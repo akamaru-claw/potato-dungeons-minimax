@@ -42,11 +42,11 @@ const Account = {
       try {
         const data = JSON.parse(saved);
         this.username = data.username;
-        this.gold = data.gold || 0;
-        this.skin = data.skin || 'potato_default';
+        this.gold = data.gold ?? 0;
+        this.skin = data.skin ?? 'potato_default';
         this.unlockedSkins = data.unlockedSkins || ['potato_default'];
         this.unlockedTrails = data.unlockedTrails || [];
-        this.trail = data.trail || '';
+        this.trail = data.trail ?? '';
         this.totalKills = data.totalKills || 0;
         this.bestFloor = data.bestFloor || 0;
         this.loggedIn = true;
@@ -83,11 +83,11 @@ const Account = {
       });
       const data = await res.json();
       if (data.ok) {
-        this.gold = Math.max(this.gold, data.gold); // Keep local if higher
-        this.bestFloor = Math.max(this.bestFloor, data.best_floor);
-        this.totalKills = Math.max(this.totalKills, data.total_kills);
-        this.skin = data.skin || this.skin;
-        this.trail = data.trail ?? this.trail ?? '';
+        this.gold = Math.max(this.gold, data.gold ?? 0); // Keep local if higher
+        this.bestFloor = Math.max(this.bestFloor, data.best_floor ?? 0);
+        this.totalKills = Math.max(this.totalKills, data.total_kills ?? 0);
+        this.skin = data.skin ?? 'potato_default';
+        this.trail = data.trail ?? '';
         this.selectedCharacter = data.selected_character || data.selectedCharacter || this.selectedCharacter || 'potato_default';
         this.unlockedSkins = data.unlocked_skins ? data.unlocked_skins.split(',').map(s => s.trim()) : ['potato_default'];
         this.unlockedTrails = data.unlocked_trails ? data.unlocked_trails.split(',').map(s => s.trim()).filter(s => s) : [];
@@ -132,9 +132,9 @@ const Account = {
       const data = await res.json();
       if (data.ok) {
         this.username = username;
-        this.gold = data.gold || 0;
-        this.skin = data.skin || 'potato_default';
-        this.trail = data.trail || '';
+        this.gold = data.gold ?? 0;
+        this.skin = data.skin ?? 'potato_default';
+        this.trail = data.trail ?? '';
         this.selectedCharacter = data.selectedCharacter || data.selected_character || 'potato_default';
         this.unlockedSkins = data.unlocked_skins ? data.unlocked_skins.split(',').map(s => s.trim()) : ['potato_default'];
         this.unlockedTrails = data.unlocked_trails ? data.unlocked_trails.split(',').map(s => s.trim()).filter(s => s) : [];
@@ -154,6 +154,7 @@ const Account = {
     this.username = null;
     this.gold = 0;
     this.skin = 'potato_default';
+    this.unlockedSkins = ['potato_default'];
     this.unlockedSkins = ['potato_default'];
     this.unlockedTrails = [];
     this.trail = '';
